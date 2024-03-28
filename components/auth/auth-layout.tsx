@@ -16,7 +16,7 @@ export const AuthMainlayout = ({ children }: { children: React.ReactNode }) => {
   
   return (
     <div className="relative w-full h-screen flex flex-row bg-neutral-950 text-neutral-200 p-10">
-      <div className="h-full w-1/2 hidden md:flex flex-row items-center justify-center gap-x-4">
+      <div className="h-full w-[45%] hidden md:flex flex-row items-center justify-center gap-x-4">
         <Image
           src="/favicon.ico"
           alt="Authentication"
@@ -26,7 +26,7 @@ export const AuthMainlayout = ({ children }: { children: React.ReactNode }) => {
         <h1 className="text-3xl font-extrabold">Lucia-Auth</h1>
       </div>
       <div className="w-[1px] h-1/2 m-auto bg-neutral-700 hidden md:block" />
-      <div className="h-full w-full md:w-1/2">
+      <div className="h-full w-full md:w-[55%]">
         <Link
           href={isSignInPage ? "/auth/sign-up" : "/auth/sign-in"}
           className={cn(
