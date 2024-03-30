@@ -10,6 +10,8 @@ import { sign_up_schema } from "@/schema/auth-schema";
 import { getUserByEmail, getUserByName } from "@/data/user";
 import { lucia } from "@/auth";
 import { cookies } from "next/headers";
+import { generateVerificationCode } from "@/data/code";
+import { sendVerificationEmail } from "@/lib/mail";
 
 export const signUp = async (data: z.infer<typeof sign_up_schema>) => {
   const validatedFields = sign_up_schema.safeParse(data);
@@ -28,26 +30,23 @@ export const signUp = async (data: z.infer<typeof sign_up_schema>) => {
 
   const id = createId();
 
-  await db.insert(userTable).values({
-    id: id,
-    user_name: user_name,
-    email: email,
-    password: hashedPassword,
-  });
+  const res = await db
+    .insert(userTable)
+    .values({
+      id: id,
+      user_name: user_name,
+      email: email,
+      password: hashedPassword,
+    })
+    .returning({
+      email: userTable.email,
+    });
 
-  const session = await lucia.createSession(id, {
-    id: id,
-    user_name: user_name,
-    image: undefined,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  });
-  const sessionCookie = lucia.createSessionCookie(session.id);
-  cookies().set(
-    sessionCookie.name,
-    sessionCookie.value,
-    sessionCookie.attributes
-  );
+  const res_email = res.map((data) => data.email) as unknown as string;
 
-  return { success: "SignUp sucessfully completed!" };
+  const verificationCode = await generateVerificationCode(res_email);
+
+  await sendVerificationEmail(res_email, verificationCode);
+
+  return { success: "Verification mail sended!" };
 };

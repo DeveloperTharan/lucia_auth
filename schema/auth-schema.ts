@@ -53,3 +53,9 @@ export const sign_in_schema = z.object({
       message: "Password must contain at least one special character",
     }),
 });
+
+export const verification_schema = z.object({
+  code: z.string().min(6, {
+    message: "Your one-time password must be 6 characters.",
+  }),
+});

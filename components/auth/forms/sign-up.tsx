@@ -114,7 +114,7 @@ export const SignUpForm = () => {
           variant={"default"}
           disabled={!isValid || isSubmitting || isPending}
         >
-          Submit
+          SignUp
         </Button>
       </form>
     </Form>

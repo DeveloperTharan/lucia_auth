@@ -28,20 +28,20 @@ export const sessionTable = pgTable("session", {
   }).notNull(),
 });
 
-export const VerificationToken = pgTable("VerificationToken", {
+export const VerificationCode = pgTable("VerificationCode", {
   id: text("id").primaryKey(),
   email: text("email").notNull(),
-  token: text("token"),
+  code: varchar("code", { length: 6 }).notNull(),
   expiresAt: timestamp("expires_at", {
     withTimezone: true,
     mode: "date",
   }).notNull(),
 });
 
-export const PasswordResetToken = pgTable("PasswordResetToken", {
+export const PasswordResetCode = pgTable("PasswordResetCode", {
   id: text("id").primaryKey(),
   email: text("email").notNull(),
-  token: text("token"),
+  code: varchar("code", { length: 6 }).notNull(),
   expiresAt: timestamp("expires_at", {
     withTimezone: true,
     mode: "date",
