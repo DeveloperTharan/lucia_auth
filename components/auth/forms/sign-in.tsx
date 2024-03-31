@@ -44,6 +44,9 @@ export const SignInForm = () => {
       signIn(values).then((data) => {
         if (data.success) {
           toast.success(data.success);
+          if (data.success == "Verification mail sended!") {
+            return router.push("/auth/new-verification");
+          }
           router.push("/");
         }
         if (data.error) return toast.error(data.error);

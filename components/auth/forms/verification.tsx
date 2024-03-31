@@ -1,17 +1,21 @@
 "use client";
 
 import React, { useTransition } from "react";
+import { useRouter } from "next/navigation";
 
+import { z } from "zod";
+import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { newVerification } from "@/actions/new-verification";
 import { verification_schema as formSchema } from "@/schema/auth-schema";
 
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import {
@@ -20,12 +24,11 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 
 export const Verification = () => {
   const [isPending, startTransition] = useTransition();
+
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -37,7 +40,15 @@ export const Verification = () => {
   const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
+    startTransition(() => {
+      newVerification(data).then((data) => {
+        if (data.success) {
+          toast.success(data.success);
+          router.push("/auth/sign-in");
+        }
+        if (data.error) return toast.error(data.error);
+      });
+    });
   };
 
   return (
