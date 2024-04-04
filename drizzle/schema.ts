@@ -13,6 +13,7 @@ export const userTable = pgTable("user", {
   password: text("password").notNull(),
   image: text("image").default(""),
   email_verified: boolean("email_verified").default(false),
+  github_id: varchar("github_id", { length: 256 }).unique(),
   createdAt: timestamp("createdAt").defaultNow(),
   updatedAt: timestamp("updatedAt").$onUpdateFn(() => new Date()),
 });

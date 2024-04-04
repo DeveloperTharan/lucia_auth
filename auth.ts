@@ -8,11 +8,12 @@ import { sessionTable, userTable } from "@/drizzle/schema";
 
 interface DatabaseUserAttributes {
   id: string;
-  user_name: string;
   email: string;
   image: string;
   createdAt: Date;
   updatedAt: Date;
+  user_name: string;
+  github_id: number;
   email_verified: boolean;
 }
 
@@ -35,12 +36,13 @@ export const lucia = new Lucia(adapter, {
   getUserAttributes: (attributes) => {
     return {
       id: attributes.id,
-      user_name: attributes.user_name,
       email: attributes.email,
       image: attributes.image,
-      email_verified: attributes.email_verified,
+      githubId: attributes.github_id,
+      user_name: attributes.user_name,
       createdAt: attributes.createdAt,
       updatedAt: attributes.updatedAt,
+      email_verified: attributes.email_verified,
     };
   },
 });
